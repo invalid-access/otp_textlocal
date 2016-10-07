@@ -95,17 +95,21 @@ class TextlocalSMSDevice(Device):
     def _deliver_token(self, token):
         self._validate_config()
 
-        url = 'https://api.textlocal.com/2010-04-01/Accounts/{0}/SMS/Messages.json'.format(settings.OTP_TEXTLOCAL_API_KEY)
+        url = settings.OTP_TEXTLOCAL_URL #'https://api.textlocal.com/2010-04-01/Accounts/{0}/SMS/Messages.json'.format(settings.OTP_TEXTLOCAL_API_KEY)
         data = {
-            'From': settings.OTP_TEXTLOCAL_SENDER,
-            'To': self.number,
-            'Body': str(token),
+            'sender': settings.OTP_TEXTLOCAL_SENDER,
+            'message': str(token),
+            'numbers': self.number,
+            'apiKey': settings.OTP_TEXTLOCAL_API_KEY,
         }
+        #{
+        #
+        #    'From': settings.OTP_TEXTLOCAL_SENDER,
+        #    'To': self.number,
+        #    'Body': str(token),
+        #}
 
-        response = requests.post(
-            url, data=data,
-            auth=(settings.OTP_TEXTLOCAL_API_KEY, settings.OTP_TEXTLOCAL_URL)
-        )
+        response = requests.post(url, data=data)
 
         try:
             response.raise_for_status()
@@ -113,8 +117,10 @@ class TextlocalSMSDevice(Device):
             logger.exception('Error sending token by Textlocal SMS: {0}'.format(e))
             raise
 
-        if 'sid' not in response.json():
-            message = response.json().get('message')
+        json_response = response.json()
+
+        if ('status' not in json_response) or json_response['status'] != 'success':
+            message = str(json_response)
             logger.error('Error sending token by Textlocal SMS: {0}'.format(message))
             raise Exception(message)
 
