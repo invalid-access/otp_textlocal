@@ -7,12 +7,12 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('otp_twilio', '0001_initial'),
+        ('otp_textlocal', '0001_initial'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='twiliosmsdevice',
+            model_name='textlocalsmsdevice',
             name='last_t',
             field=models.BigIntegerField(default=-1, help_text='The t value of the latest verified token. The next token must be at a higher time step.'),
             preserve_default=True,

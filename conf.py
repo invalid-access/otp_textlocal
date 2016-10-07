@@ -11,13 +11,13 @@ class Settings(object):
     values if they are not specified by the configuration.
     """
     _defaults = {
-        'OTP_TWILIO_ACCOUNT': None,
-        'OTP_TWILIO_AUTH': None,
-        'OTP_TWILIO_CHALLENGE_MESSAGE': "Sent by SMS",
-        'OTP_TWILIO_FROM': None,
-        'OTP_TWILIO_NO_DELIVERY': False,
-        'OTP_TWILIO_TOKEN_TEMPLATE': '{token}',
-        'OTP_TWILIO_TOKEN_VALIDITY': 30,
+        'OTP_TEXTLOCAL_ACCOUNT': None,
+        'OTP_TEXTLOCAL_AUTH': None,
+        'OTP_TEXTLOCAL_CHALLENGE_MESSAGE': "Sent by SMS",
+        'OTP_TEXTLOCAL_FROM': None,
+        'OTP_TEXTLOCAL_NO_DELIVERY': False,
+        'OTP_TEXTLOCAL_TOKEN_TEMPLATE': '{token}',
+        'OTP_TEXTLOCAL_TOKEN_VALIDITY': 30,
     }
 
     def __getattr__(self, name):

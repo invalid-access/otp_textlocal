@@ -26,11 +26,11 @@ def key_validator(value):
     return hex_validator(20)(value)
 
 
-class TwilioSMSDevice(Device):
+class TextlocalSMSDevice(Device):
     """
-    A :class:`~django_otp.models.Device` that delivers codes via the Twilio SMS
+    A :class:`~django_otp.models.Device` that delivers codes via the Textlocal SMS
     service. This uses TOTP to generate temporary tokens, which are valid for
-    :setting:`OTP_TWILIO_TOKEN_VALIDITY` seconds. Once a given token has been
+    :setting:`OTP_TEXTLOCAL_TOKEN_VALIDITY` seconds. Once a given token has been
     accepted, it is no longer valid, nor is any other token generated at an
     earlier time.
 
@@ -65,7 +65,7 @@ class TwilioSMSDevice(Device):
     )
 
     class Meta(Device.Meta):
-        verbose_name = "Twilio SMS Device"
+        verbose_name = "Textlocal SMS Device"
 
     @property
     def bin_key(self):
@@ -75,58 +75,58 @@ class TwilioSMSDevice(Device):
         """
         Sends the current TOTP token to ``self.number``.
 
-        :returns: :setting:`OTP_TWILIO_CHALLENGE_MESSAGE` on success.
+        :returns: :setting:`OTP_TEXTLOCAL_CHALLENGE_MESSAGE` on success.
         :raises: Exception if delivery fails.
 
         """
         totp = self.totp_obj()
         token = format(totp.token(), '06d')
-        message = settings.OTP_TWILIO_TOKEN_TEMPLATE.format(token=token)
+        message = settings.OTP_TEXTLOCAL_TOKEN_TEMPLATE.format(token=token)
 
-        if settings.OTP_TWILIO_NO_DELIVERY:
+        if settings.OTP_TEXTLOCAL_NO_DELIVERY:
             logger.info(message)
         else:
             self._deliver_token(message)
 
-        challenge = settings.OTP_TWILIO_CHALLENGE_MESSAGE.format(token=token)
+        challenge = settings.OTP_TEXTLOCAL_CHALLENGE_MESSAGE.format(token=token)
 
         return challenge
 
     def _deliver_token(self, token):
         self._validate_config()
 
-        url = 'https://api.twilio.com/2010-04-01/Accounts/{0}/SMS/Messages.json'.format(settings.OTP_TWILIO_ACCOUNT)
+        url = 'https://api.textlocal.com/2010-04-01/Accounts/{0}/SMS/Messages.json'.format(settings.OTP_TEXTLOCAL_ACCOUNT)
         data = {
-            'From': settings.OTP_TWILIO_FROM,
+            'From': settings.OTP_TEXTLOCAL_FROM,
             'To': self.number,
             'Body': str(token),
         }
 
         response = requests.post(
             url, data=data,
-            auth=(settings.OTP_TWILIO_ACCOUNT, settings.OTP_TWILIO_AUTH)
+            auth=(settings.OTP_TEXTLOCAL_ACCOUNT, settings.OTP_TEXTLOCAL_AUTH)
         )
 
         try:
             response.raise_for_status()
         except Exception as e:
-            logger.exception('Error sending token by Twilio SMS: {0}'.format(e))
+            logger.exception('Error sending token by Textlocal SMS: {0}'.format(e))
             raise
 
         if 'sid' not in response.json():
             message = response.json().get('message')
-            logger.error('Error sending token by Twilio SMS: {0}'.format(message))
+            logger.error('Error sending token by Textlocal SMS: {0}'.format(message))
             raise Exception(message)
 
     def _validate_config(self):
-        if settings.OTP_TWILIO_ACCOUNT is None:
-            raise ImproperlyConfigured('OTP_TWILIO_ACCOUNT must be set to your Twilio account identifier')
+        if settings.OTP_TEXTLOCAL_ACCOUNT is None:
+            raise ImproperlyConfigured('OTP_TEXTLOCAL_ACCOUNT must be set to your Textlocal account identifier')
 
-        if settings.OTP_TWILIO_AUTH is None:
-            raise ImproperlyConfigured('OTP_TWILIO_AUTH must be set to your Twilio auth token')
+        if settings.OTP_TEXTLOCAL_AUTH is None:
+            raise ImproperlyConfigured('OTP_TEXTLOCAL_AUTH must be set to your Textlocal auth token')
 
-        if settings.OTP_TWILIO_FROM is None:
-            raise ImproperlyConfigured('OTP_TWILIO_FROM must be set to one of your Twilio phone numbers')
+        if settings.OTP_TEXTLOCAL_FROM is None:
+            raise ImproperlyConfigured('OTP_TEXTLOCAL_FROM must be set to one of your Textlocal phone numbers')
 
     def verify_token(self, token):
         try:
@@ -135,7 +135,7 @@ class TwilioSMSDevice(Device):
             verified = False
         else:
             totp = self.totp_obj()
-            tolerance = settings.OTP_TWILIO_TOKEN_VALIDITY
+            tolerance = settings.OTP_TEXTLOCAL_TOKEN_VALIDITY
 
             for offset in range(-tolerance, 1):
                 totp.drift = offset

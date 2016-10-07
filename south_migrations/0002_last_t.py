@@ -8,15 +8,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'TwilioSMSDevice.last_t'
-        db.add_column('otp_twilio_twiliosmsdevice', 'last_t',
+        # Adding field 'TextlocalSMSDevice.last_t'
+        db.add_column('otp_textlocal_textlocalsmsdevice', 'last_t',
                       self.gf('django.db.models.fields.BigIntegerField')(default=-1),
                       keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting field 'TwilioSMSDevice.last_t'
-        db.delete_column('otp_twilio_twiliosmsdevice', 'last_t')
+        # Deleting field 'TextlocalSMSDevice.last_t'
+        db.delete_column('otp_textlocal_textlocalsmsdevice', 'last_t')
 
 
     models = {
@@ -56,8 +56,8 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'otp_twilio.twiliosmsdevice': {
-            'Meta': {'object_name': 'TwilioSMSDevice'},
+        'otp_textlocal.textlocalsmsdevice': {
+            'Meta': {'object_name': 'TextlocalSMSDevice'},
             'confirmed': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'key': ('django.db.models.fields.CharField', [], {'default': "'866745e83475f5b1d2bcce3f9e891d7b3fec612e'", 'max_length': '40'}),
@@ -68,4 +68,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['otp_twilio']
+    complete_apps = ['otp_textlocal']

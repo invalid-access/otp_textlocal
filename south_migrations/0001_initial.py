@@ -8,8 +8,8 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'TwilioSMSDevice'
-        db.create_table('otp_twilio_twiliosmsdevice', (
+        # Adding model 'TextlocalSMSDevice'
+        db.create_table('otp_textlocal_textlocalsmsdevice', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=64)),
@@ -17,12 +17,12 @@ class Migration(SchemaMigration):
             ('number', self.gf('django.db.models.fields.CharField')(max_length=16)),
             ('key', self.gf('django.db.models.fields.CharField')(default='2de4ad1e612a69ff20e050cf6f1bd0bcb7a36652', max_length=40)),
         ))
-        db.send_create_signal('otp_twilio', ['TwilioSMSDevice'])
+        db.send_create_signal('otp_textlocal', ['TextlocalSMSDevice'])
 
 
     def backwards(self, orm):
-        # Deleting model 'TwilioSMSDevice'
-        db.delete_table('otp_twilio_twiliosmsdevice')
+        # Deleting model 'TextlocalSMSDevice'
+        db.delete_table('otp_textlocal_textlocalsmsdevice')
 
 
     models = {
@@ -62,8 +62,8 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'otp_twilio.twiliosmsdevice': {
-            'Meta': {'object_name': 'TwilioSMSDevice'},
+        'otp_textlocal.textlocalsmsdevice': {
+            'Meta': {'object_name': 'TextlocalSMSDevice'},
             'confirmed': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'key': ('django.db.models.fields.CharField', [], {'default': "'05636a2b12ce05002dac0fc5ec5932d2a4d8dedc'", 'max_length': '40'}),
@@ -73,4 +73,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['otp_twilio']
+    complete_apps = ['otp_textlocal']

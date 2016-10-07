@@ -3,13 +3,13 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from django.contrib import admin
 from django.contrib.admin.sites import AlreadyRegistered
 
-from .models import TwilioSMSDevice
+from .models import TextlocalSMSDevice
 
 
-class TwilioSMSDeviceAdmin(admin.ModelAdmin):
+class TextlocalSMSDeviceAdmin(admin.ModelAdmin):
     """
     :class:`~django.contrib.admin.ModelAdmin` for
-    :class:`~otp_twilio.models.TwilioSMSDevice`.
+    :class:`~otp_textlocal.models.TextlocalSMSDevice`.
     """
     fieldsets = [
         ('Identity', {
@@ -23,7 +23,7 @@ class TwilioSMSDeviceAdmin(admin.ModelAdmin):
 
 
 try:
-    admin.site.register(TwilioSMSDevice, TwilioSMSDeviceAdmin)
+    admin.site.register(TextlocalSMSDevice, TextlocalSMSDeviceAdmin)
 except AlreadyRegistered:
     # Ignore the useless exception from multiple imports
     pass
