@@ -11,10 +11,10 @@ class Settings(object):
     values if they are not specified by the configuration.
     """
     _defaults = {
-        'OTP_TEXTLOCAL_ACCOUNT': None,
-        'OTP_TEXTLOCAL_AUTH': None,
+        'OTP_TEXTLOCAL_API_KEY': None,
+        'OTP_TEXTLOCAL_URL': None,
         'OTP_TEXTLOCAL_CHALLENGE_MESSAGE': "Sent by SMS",
-        'OTP_TEXTLOCAL_FROM': None,
+        'OTP_TEXTLOCAL_SENDER': None,
         'OTP_TEXTLOCAL_NO_DELIVERY': False,
         'OTP_TEXTLOCAL_TOKEN_TEMPLATE': '{token}',
         'OTP_TEXTLOCAL_TOKEN_VALIDITY': 30,

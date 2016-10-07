@@ -95,16 +95,16 @@ class TextlocalSMSDevice(Device):
     def _deliver_token(self, token):
         self._validate_config()
 
-        url = 'https://api.textlocal.com/2010-04-01/Accounts/{0}/SMS/Messages.json'.format(settings.OTP_TEXTLOCAL_ACCOUNT)
+        url = 'https://api.textlocal.com/2010-04-01/Accounts/{0}/SMS/Messages.json'.format(settings.OTP_TEXTLOCAL_API_KEY)
         data = {
-            'From': settings.OTP_TEXTLOCAL_FROM,
+            'From': settings.OTP_TEXTLOCAL_SENDER,
             'To': self.number,
             'Body': str(token),
         }
 
         response = requests.post(
             url, data=data,
-            auth=(settings.OTP_TEXTLOCAL_ACCOUNT, settings.OTP_TEXTLOCAL_AUTH)
+            auth=(settings.OTP_TEXTLOCAL_API_KEY, settings.OTP_TEXTLOCAL_URL)
         )
 
         try:
@@ -119,14 +119,14 @@ class TextlocalSMSDevice(Device):
             raise Exception(message)
 
     def _validate_config(self):
-        if settings.OTP_TEXTLOCAL_ACCOUNT is None:
-            raise ImproperlyConfigured('OTP_TEXTLOCAL_ACCOUNT must be set to your Textlocal account identifier')
+        if settings.OTP_TEXTLOCAL_API_KEY is None:
+            raise ImproperlyConfigured('OTP_TEXTLOCAL_API_KEY must be set to your Textlocal API KEY')
 
-        if settings.OTP_TEXTLOCAL_AUTH is None:
-            raise ImproperlyConfigured('OTP_TEXTLOCAL_AUTH must be set to your Textlocal auth token')
+        if settings.OTP_TEXTLOCAL_URL is None:
+            raise ImproperlyConfigured('OTP_TEXTLOCAL_URL must be set to the Textlocal send-msg API endpoint URL')
 
-        if settings.OTP_TEXTLOCAL_FROM is None:
-            raise ImproperlyConfigured('OTP_TEXTLOCAL_FROM must be set to one of your Textlocal phone numbers')
+        if settings.OTP_TEXTLOCAL_SENDER is None:
+            raise ImproperlyConfigured('OTP_TEXTLOCAL_SENDER must be set to one of your Textlocal sender (based on mask)')
 
     def verify_token(self, token):
         try:
